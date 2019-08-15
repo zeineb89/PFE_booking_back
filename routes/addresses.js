@@ -8,5 +8,9 @@ router.get('/:id',addressController.getOneAddress);
 router.get('/',addressController.getAllAddresss);
 router.put('/:id',addressController.updateAddress);
 router.delete('/:id',addressController.deleteAddress);
+// router.delete('/:id',addressController.deleteAddress);
+// router.delete('/:id',addressController.deleteAddress);
+
+
 
 module.exports = router;
