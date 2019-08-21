@@ -19,18 +19,10 @@ carSchema = new Schema({
         type : Number,
         required: true
     },
-    dateVehicleFirstRegistered:{
-        type : Date,
-        required: true
-    },
-    releaseDate:{
-        type : Date,
-        required: true
-    },
     options_accessoires: [
         { 
             type: String,
-            enum : ['Climatisation','Régulateur de vitesse','GPS','Lecteur','Entrée audio','iPod'],
+            enum : ['Climatisation','Régulateur de vitesse','GPS','Lecteur CD','Entrée audio','iPod'],
         }
     ],
     price: {
@@ -58,7 +50,7 @@ carSchema = new Schema({
     },
     energy: {
         type: String,
-        enum : ['essence','diesel','electrique'],
+        enum : ['essence','diesel','electric'],
         default: 'essence'
     },
     mileage: {
@@ -76,6 +68,11 @@ carSchema = new Schema({
         ref:'Device',
         required: true,
         unique: true
+    },
+    brand: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Brand',
+        required: true
     },
 },{
     timestamps : true

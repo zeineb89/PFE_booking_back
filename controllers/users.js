@@ -97,16 +97,32 @@ const authenticate = (req, res, next) => {
 
 
 
+// const getOneUser = (req,res,next)=>{
+//     const {id} = req.params
+//     User.findById(id,(err,user)=>{
+//         if(err){
+//             res.json({error : true, message :err});
+//             return;
+//         }
+        
+//         res.json({success:true, user:user});
+//     })
+// }
+
 const getOneUser = (req,res,next)=>{
     const {id} = req.params
-    User.findById(id,(err,user)=>{
-        if(err){
-            res.json({error : true, message :err});
-            return;
+    User.findById(id).populate('address').then(user=>{
+        if(user){
+            res.status(200).json(user)
         }
-        res.json({success:true, user:user});
+        else{
+            res.status(404).json({error:"jhgjj"})
+        
+        }
+        
     })
 }
+
 
 const getUserByEmail = (req,res,next)=>{
     // const {id} = req.params
@@ -152,7 +168,7 @@ const deleteUser = (req,res,next)=>{
 const validateClient = (req,res,next)=>{
     const _id=req.params.id;
     const query = {_id};
-    User.findByIdAndUpdate(query,{valid: true},{new: true},(err,user)=>{
+    User.findByIdAndUpdate(query,{valid: req.body.event},{new: true},(err,user)=>{
         if(err){
             res.json({error : true, message :err});
             return;
@@ -160,5 +176,6 @@ const validateClient = (req,res,next)=>{
         res.json({success:true, user:user});
     })
 }
+
 
 module.exports={createUser,getAllUsers,getAllOwners, getAllClients,getOneUser,getUserByEmail,updateUser,deleteUser,validateClient,authenticate};

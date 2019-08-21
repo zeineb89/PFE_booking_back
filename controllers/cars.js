@@ -1,13 +1,24 @@
 const Car =require('../models/cars');
 
 const getAllCars = (req,res,next)=>{
-    Car.find((err,cars)=>{
-        if(err){
-            res.json({error : true, message :err});
-            return;
+    // Car.Car((err,cars)=>{
+    //     if(err){
+    //         res.json({error : true, message :err});
+    //         return;
+    //     }
+    //     res.json({success:true, list: cars});
+    // });
+
+    Car.find().populate('address').populate('owner').populate('device').populate('brand').then(cars=>{
+        if(cars){
+            res.status(200).json(cars)
         }
-        res.json({success:true, list: cars});
-    });
+        else{
+            res.status(404).json({error:"qdsdsg"})
+        
+        }
+        
+    })
 }
 
 const createCar = (req,res,next)=>{
@@ -30,6 +41,38 @@ const getOneCar = (req,res,next)=>{
             return;
         }
         res.json({success:true, car: car});
+    })
+}
+
+const getCarsByOwner = (req,res,next)=>{
+    const cars = []
+    const ownerId = req.params
+    console.log(ownerId)
+    // Car.find(id,(err,car)=>{
+    //     if(err){
+    //         res.json({error : true, message :err});
+    //         return;
+    //     }
+    //     res.json({success:true, car: car});
+    // })
+    Car.find().then(allCars=>{
+        if(allCars){
+           // console.log(cars)
+            for(let i=0; i<allCars.length; i++){    
+                console.log(allCars[i].owner)
+                if(allCars[i].owner == ownerId.id){
+                    cars.push(allCars[i])
+                    console.log('his car')
+                    
+                }
+            }
+            res.status(200).json(cars)
+        }
+        else{
+            res.status(404).json({error:"qdsdsg"})
+        
+        }
+        
     })
 }
 
@@ -59,4 +102,4 @@ const deleteCar = (req,res,next)=>{
     res.json({success:true});
 }
 
-module.exports={createCar,getAllCars,getOneCar,updateCar,deleteCar};
+module.exports={createCar,getAllCars,getOneCar,updateCar,deleteCar,getCarsByOwner};

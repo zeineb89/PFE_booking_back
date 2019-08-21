@@ -1,7 +1,7 @@
 const Brand =require('../models/brands');
 
 const getAllBrands = (req,res,next)=>{
-    Brand.find((err,Brands)=>{
+    Brand.find((err,brands)=>{
         if(err){
             res.json({error : true, message :err});
             return;
