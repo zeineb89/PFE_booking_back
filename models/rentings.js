@@ -4,19 +4,20 @@ mongoose.set('useCreateIndex', true)
 const Schema = mongoose.Schema;
 
 rentingSchema = new Schema({ 
-    booking: {
+    car: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:'Booking',
+        ref:'Car',
         required: true
     },
-    price: {
-        type: String,
+    client: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'User',
         required: true
     },
-    currency: {
-        type: String,
-        enum : ['EUR','USD'],
-        default: 'EUR'
+    inProgress: {
+        type: Boolean,
+        required: true,
+        default: true
     }
 },{
     timestamps : true

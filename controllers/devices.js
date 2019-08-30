@@ -15,7 +15,7 @@ const createDevice = (req,res,next)=>{
     console.log(device)
     device.save()
     .then(device => {
-        res.json({success:true, device: device});
+        res.json(device);
     })
     .catch(err => {
         res.json({error : true, message :err});
@@ -30,6 +30,31 @@ const getOneDevice = (req,res,next)=>{
             return;
         }
         res.json({success:true, device: device});
+    })
+}
+
+const getDevicesOwner = (req,res,next)=>{
+    const ownerId = req.params
+    const devices = []
+    console.log(ownerId)
+    Device.find().populate('address').populate('owner').then(allDevices=>{
+        if(allDevices){
+            console.log(allDevices)
+            for(let i=0; i<allDevices.length; i++){    
+                console.log(allDevices[i].owner)
+                if(allDevices[i].owner._id == ownerId.id){
+                devices.push(allDevices[i])
+                    console.log('his device')
+                    
+                }
+            }
+            res.status(200).json(devices)
+        }
+        else{
+            res.status(404).json({error:"qdsdsg"})
+        
+        }
+        
     })
 }
 
@@ -81,4 +106,4 @@ const lockDevice = (req,res,next) =>{
     })
 }
 
-module.exports={createDevice,getAllDevices,getOneDevice,updateDevice,deleteDevice,unlockDevice,lockDevice};
+module.exports={createDevice,getAllDevices,getOneDevice,getDevicesOwner,updateDevice,deleteDevice,unlockDevice,lockDevice};

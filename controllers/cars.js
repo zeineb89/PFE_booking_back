@@ -1,5 +1,7 @@
 const Car =require('../models/cars');
-
+const multer = require('multer');
+const crypto = require('crypto');
+var path = require('path')
 const getAllCars = (req,res,next)=>{
     // Car.Car((err,cars)=>{
     //     if(err){
@@ -9,7 +11,7 @@ const getAllCars = (req,res,next)=>{
     //     res.json({success:true, list: cars});
     // });
 
-    Car.find().populate('address').populate('owner').populate('device').populate('brand').then(cars=>{
+    Car.find().populate('owner').populate('device').populate('brand').then(cars=>{
         if(cars){
             res.status(200).json(cars)
         }
@@ -48,19 +50,12 @@ const getCarsByOwner = (req,res,next)=>{
     const cars = []
     const ownerId = req.params
     console.log(ownerId)
-    // Car.find(id,(err,car)=>{
-    //     if(err){
-    //         res.json({error : true, message :err});
-    //         return;
-    //     }
-    //     res.json({success:true, car: car});
-    // })
-    Car.find().then(allCars=>{
+    Car.find().populate('owner').populate('device').populate('brand').then(allCars=>{
         if(allCars){
            // console.log(cars)
             for(let i=0; i<allCars.length; i++){    
                 console.log(allCars[i].owner)
-                if(allCars[i].owner == ownerId.id){
+                if(allCars[i].owner._id == ownerId.id){
                     cars.push(allCars[i])
                     console.log('his car')
                     
@@ -69,10 +64,8 @@ const getCarsByOwner = (req,res,next)=>{
             res.status(200).json(cars)
         }
         else{
-            res.status(404).json({error:"qdsdsg"})
-        
+            res.status(404).json({error:"error with cars by owner"})
         }
-        
     })
 }
 
@@ -102,4 +95,38 @@ const deleteCar = (req,res,next)=>{
     res.json({success:true});
 }
 
-module.exports={createCar,getAllCars,getOneCar,updateCar,deleteCar,getCarsByOwner};
+
+let lastUploadedImageName = '';
+// file upload configuration
+const storage = multer.diskStorage({
+	destination: './uploads/',
+	filename: function (req, file, callback) {
+		crypto.pseudoRandomBytes(16, function(err, raw) {
+			if (err) return callback(err);
+			lastUploadedImageName = raw.toString('hex') + path.extname(file.originalname);
+			callback(null, lastUploadedImageName);
+		});
+	}
+});
+
+var upload = multer({storage: storage});
+
+const uploadImage =(upload.single('image'), (req, res)=>{
+    //console.log(req.file.filename);
+    	console.log('req.file', req.file);
+    if (!req.file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+		return res.status(400).json({ msg: 'only image files please'});
+	}
+	res.status(201).send({ fileName: req.file.filename, file: req.file });
+})
+
+
+
+
+
+
+
+
+
+
+module.exports={createCar,getAllCars,getOneCar,updateCar,deleteCar,getCarsByOwner,uploadImage};

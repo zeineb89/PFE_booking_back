@@ -4,6 +4,7 @@ var router = express.Router();
 const deviceController = require('../controllers/devices');
 
 router.post('/addDevice',deviceController.createDevice);
+router.get('/owner/:id',deviceController.getDevicesOwner);
 router.get('/:id',deviceController.getOneDevice);
 router.get('/',deviceController.getAllDevices);
 router.put('/:id',deviceController.updateDevice);

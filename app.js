@@ -3,7 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
+var multer = require('multer');
 //Import the mongoose module
 var mongoose = require('mongoose');
 const cors = require('cors');
@@ -17,7 +18,7 @@ var db = mongoose.connection;
 
 //Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
+var app = express();
 // Define schema
 // var Schema = mongoose.Schema;
 
@@ -29,17 +30,15 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // Compile model from schema
 //var SomeModel = mongoose.model('SomeModel', SomeModelSchema );
 
-
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var carsRouter = require('./routes/cars');
 var addressesRouter = require('./routes/addresses');
 var rentingsRouter = require('./routes/rentings');
-var bookingsRouter = require('./routes/bookings');
 var devicesRouter = require('./routes/devices');
 var brandsRouter = require('./routes/brands');
 
-var app = express();
+
 app.set('secretKey', 'nodeRestApi'); // jwt secret token
 
 // view engine setup
@@ -58,9 +57,11 @@ app.use('/addresses', addressesRouter);
 
 // private route
 app.use('/rentings', rentingsRouter);
-app.use('/bookings', bookingsRouter);
 app.use('/devices', devicesRouter);
 app.use('/brands', brandsRouter);
+
+
+
 
 
 // private route

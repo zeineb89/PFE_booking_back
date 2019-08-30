@@ -39,8 +39,7 @@ carSchema = new Schema({
         required: true
     },
     address:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:'Address',
+        type: Object,
         required: true
     },
     available : {
