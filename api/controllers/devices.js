@@ -85,8 +85,10 @@ const deleteDevice = (req,res,next)=>{
 }
 
 
-const unlockDevice = (req,res,next) =>{      
-    Device.findByIdAndUpdate({locked : false},body,{new: true},(err,device)=>{
+const unlockDevice = (req,res,next) =>{   
+    const _id=req.params.id;
+    const query = {_id};
+    Device.findByIdAndUpdate(query,{locked : false},{new: true},(err,device)=>{
         if(err){
             res.json({error : true, message :err});
             return;

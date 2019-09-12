@@ -35,7 +35,9 @@ const Schema = mongoose.Schema;
     birthDate: {
         type: Date,
         trim: true,
-        required: true
+    },
+    phone_number: {
+        type: Number,
     },
     role: {
         type: String,
@@ -51,7 +53,6 @@ const Schema = mongoose.Schema;
     },
     image: {
         type: String,
-        required: true
     },
     valid: {
         type: Boolean,
@@ -64,8 +65,7 @@ const Schema = mongoose.Schema;
         type: String
     },
     address:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:'Address'
+        type: String,
     }
 },{
     timestamps : true

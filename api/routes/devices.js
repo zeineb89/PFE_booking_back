@@ -8,8 +8,8 @@ router.get('/owner/:id',deviceController.getDevicesOwner);
 router.get('/:id',deviceController.getOneDevice);
 router.get('/',deviceController.getAllDevices);
 router.put('/:id',deviceController.updateDevice);
-router.put('/lockDevice/:id',deviceController.unlockDevice);
-router.put('/unlockDevice/:id',deviceController.lockDevice);
+router.put('/lockDevice/:id',deviceController.lockDevice);
+router.put('/unlockDevice/:id',deviceController.unlockDevice);
 router.delete('/:id',deviceController.deleteDevice);
 
 module.exports = router;

@@ -9,7 +9,6 @@ carSchema = new Schema({
     },
     modelDate:{
         type : Number,
-        required: true
     },
     numberOfDoors: {
         type : Number,
@@ -30,7 +29,7 @@ carSchema = new Schema({
         required: true
     },
     images: {
-        type: Array,
+        type: String,
         required: true
     },
     owner: {
