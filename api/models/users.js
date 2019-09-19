@@ -65,7 +65,8 @@ const Schema = mongoose.Schema;
         type: String
     },
     address:{
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Address',
     }
 },{
     timestamps : true

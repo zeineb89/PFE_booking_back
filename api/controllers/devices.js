@@ -12,7 +12,7 @@ const getAllDevices = (req,res,next)=>{
 
 const createDevice = (req,res,next)=>{
     let device = new Device(req.body);
-    console.log(device)
+    // console.log(device)
     device.save()
     .then(device => {
         res.json(device);
@@ -36,15 +36,15 @@ const getOneDevice = (req,res,next)=>{
 const getDevicesOwner = (req,res,next)=>{
     const ownerId = req.params
     const devices = []
-    console.log(ownerId)
+    // console.log(ownerId)
     Device.find().populate('address').populate('owner').then(allDevices=>{
         if(allDevices){
-            console.log(allDevices)
+            // console.log(allDevices)
             for(let i=0; i<allDevices.length; i++){    
-                console.log(allDevices[i].owner)
+                // console.log(allDevices[i].owner)
                 if(allDevices[i].owner._id == ownerId.id){
                 devices.push(allDevices[i])
-                    console.log('his device')
+                    // console.log('his device')
                     
                 }
             }

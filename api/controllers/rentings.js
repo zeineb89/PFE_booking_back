@@ -82,9 +82,17 @@ const createRenting = (req,res,next)=>{
                         return;
                     }
                     let renting = new Renting(req.body);
+                    // let objRetour = {
+                    //     carId: req.body.car._id,
+                    //     deviceId: req.body.car.device._id,
+                    //     position :req.body.car.address,
+                    //     client : req.body.client._id,
+                    //     inProgress: true
+                    // }
                     console.log(renting)
                     renting.save()
                     .then(renting => {
+
                         res.json({success: true , renting: renting});
                     })
                     .catch(err => {

@@ -9,30 +9,17 @@ var admin = require("firebase-admin");
 var serviceAccount = require("./../../../iotapp-c9343-firebase-adminsdk-xz8tk-ae50a47ca1.json");
 // "/home/zeineb-ghdir/project_pfe/iotapp-c9343-firebase-adminsdk-xz8tk-ae50a47ca1.json"
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://iotapp-c9343.firebaseio.com'
+credential: admin.credential.cert(serviceAccount),
+databaseURL: 'https://iotapp-c9343.firebaseio.com'
+
   });
 
-// As an admin, the app has access to read and write all data, regardless of Security Rules
+      // As an admin, the app has access to read and write all data, regardless of Security Rules
 var db = admin.database();
-var ref = db.ref("iotapp-c9343");
-
-const fireData = ()=>{
-    console.log("dddddddddddddddddddddddddddddd")
-
-    var usersRef = ref.child("users");
-usersRef.set({
-  alanisawesome: {
-    date_of_birth: "June 23, 1912",
-    full_name: "Alan Turing"
-  },
-  gracehop: {
-    date_of_birth: "December 9, 1906",
-    full_name: "Grace Hopper"
-  }
-});
-
-}
+var ref = db.ref("cars");
+console.log("node admin firebase is here ++++++++++++++++++++++++ " + ref.on("value", function(snapshot) {
+    console.log(snapshot.val());
+}));
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -76,13 +63,25 @@ const getAllCars = (req,res,next)=>{
 
 
 const createCar = ((req,res,next)=>{
-    console.log("req.body*********************************************")
-    console.log(req.body)
+    console.log("req.body*********************************************");
+    console.log(req.body);
     let car = new Car(req.body);
+    var dev= car.device;
 
     console.log(car)
     car.save()
     .then(car => {
+        let idcar=car._id;
+        let iddev=dev._id;
+        let pos = car.address;
+        var name = idcar + '_' + iddev;
+        var devicesRef = ref.child(name);
+        var data = {
+            position:pos,
+            locked:'true'
+        }
+        devicesRef.set(data);
+        console.log('it s doneeeeee');
         res.json({success:true, car: car});
     })
     .catch(err => {
@@ -104,15 +103,15 @@ const getOneCar = (req,res,next)=>{
 const getCarsByOwner = (req,res,next)=>{
     const cars = []
     const ownerId = req.params
-    console.log(ownerId)
+    // console.log(ownerId)
     Car.find().populate('owner').populate('device').populate('brand').then(allCars=>{
         if(allCars){
-           console.log(allCars)
+        //    console.log(allCars)
             for(let i=0; i<allCars.length; i++){    
-                console.log(allCars[i])
+                // console.log(allCars[i])
                 if(allCars[i].owner._id == ownerId.id){
                     cars.push(allCars[i])
-                    console.log('his car')
+                    // console.log('his car')
                     
                 }
             }
@@ -151,4 +150,4 @@ const deleteCar = (req,res,next)=>{
 }
 
 
-module.exports={createCar,getAllCars,getOneCar,updateCar,deleteCar,getCarsByOwner,fireData};
+module.exports={createCar,getAllCars,getOneCar,updateCar,deleteCar,getCarsByOwner};
